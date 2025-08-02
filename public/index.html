@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Express Drawing App</title>
-        <link rel="stylesheet" href="style.css" />
-        <script src="script.js"></script>
-    </head>
-    <body>
-<canvas class="whiteboard"></canvas>  
-<script src="/socket.io/socket.io.js"></script>
-<script src="script.js"></script>
-     </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express Doodle</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="controls">
+      <label>Цвет: <input type="color" id="colorPicker" value="#000000" /></label>
+      <button id="eraserBtn">Ластик</button>
+      <button id="drawBtn">Рисовать</button>
+      <button id="textBtn">Текст</button>
+      <button id="clearBtn">Очистить всё</button>
+      <input type="text" id="textInput" placeholder="Введите текст" style="display:none;" />
+    </div>
+
+    <canvas class="whiteboard"></canvas>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

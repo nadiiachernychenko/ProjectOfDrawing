@@ -1,4 +1,52 @@
-* { margin:0; padding:0; list-style: none; line-height: 1; }
-.whiteboard {
-    display: block;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body, html {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#controls {
+  padding: 10px;
+  background: #f0f0f0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+#controls button, 
+#controls input[type="color"], 
+#controls input[type="text"] {
+  padding: 8px 16px;
+  font-size: 16px;
+  border: 2px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#controls button:hover, 
+#controls input[type="color"]:hover, 
+#controls input[type="text"]:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+#controls input[type="text"] {
+  width: 200px;
+}
+
+canvas.whiteboard {
+  flex: 1;
+  border: 1px solid #ccc;
+  touch-action: none;
+  display: block;
 }
