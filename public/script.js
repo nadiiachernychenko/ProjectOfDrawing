@@ -7,8 +7,12 @@ var current = {
   color: "#000000",
   mode: "draw" // draw, erase, text
 };
+
 var lastPos = { x: 0, y: 0 };
+
 var textInput = document.getElementById("textInput");
+var brushSizeInput = document.getElementById("brushSize");
+var eraserSizeInput = document.getElementById("eraserSize");
 
 // Настройка размера холста с учётом панели управления
 function onResize() {
@@ -17,6 +21,13 @@ function onResize() {
 }
 window.addEventListener("resize", onResize);
 onResize();
+
+// Подсветка активной кнопки
+function setActiveButton(id) {
+  ["drawBtn", "eraserBtn", "textBtn"].forEach(buttonId => {
+    document.getElementById(buttonId).classList.toggle("active", buttonId === id);
+  });
+}
 
 // Выбор цвета
 document.getElementById("colorPicker").addEventListener("change", (e) => {
@@ -27,15 +38,18 @@ document.getElementById("colorPicker").addEventListener("change", (e) => {
 document.getElementById("eraserBtn").addEventListener("click", () => {
   current.mode = "erase";
   textInput.style.display = "none";
+  setActiveButton("eraserBtn");
 });
 document.getElementById("drawBtn").addEventListener("click", () => {
   current.mode = "draw";
   textInput.style.display = "none";
+  setActiveButton("drawBtn");
 });
 document.getElementById("textBtn").addEventListener("click", () => {
   current.mode = "text";
   textInput.style.display = "inline-block";
   textInput.focus();
+  setActiveButton("textBtn");
 });
 document.getElementById("clearBtn").addEventListener("click", () => {
   clearCanvas(true);
@@ -49,13 +63,13 @@ function clearCanvas(emit) {
   }
 }
 
-// Отрисовка линии
-function drawLine(x0, y0, x1, y1, color, emit) {
+// Отрисовка линии с передачей нормализованной толщины
+function drawLine(x0, y0, x1, y1, color, emit, lineWidth) {
   context.beginPath();
   context.moveTo(x0, y0);
   context.lineTo(x1, y1);
   context.strokeStyle = color;
-  context.lineWidth = current.mode === "erase" ? 20 : 2; // Толще для ластика
+  context.lineWidth = lineWidth;
   context.lineCap = "round";
   context.stroke();
   context.closePath();
@@ -69,7 +83,8 @@ function drawLine(x0, y0, x1, y1, color, emit) {
     y0: y0 / h,
     x1: x1 / w,
     y1: y1 / h,
-    color
+    color: color,
+    normLineWidth: lineWidth / w
   });
 }
 
@@ -119,9 +134,9 @@ function onPointerMove(e) {
   var y = e.clientY - rect.top;
 
   if (current.mode === "draw") {
-    drawLine(lastPos.x, lastPos.y, x, y, current.color, true);
+    drawLine(lastPos.x, lastPos.y, x, y, current.color, true, parseInt(brushSizeInput.value, 10));
   } else if (current.mode === "erase") {
-    drawLine(lastPos.x, lastPos.y, x, y, "white", true);
+    drawLine(lastPos.x, lastPos.y, x, y, "white", true, parseInt(eraserSizeInput.value, 10));
   }
 
   lastPos.x = x;
@@ -142,7 +157,16 @@ canvas.addEventListener("pointerout", onPointerUp);
 socket.on("drawing", function(data) {
   var w = canvas.width;
   var h = canvas.height;
-  drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
+  var realLineWidth = data.normLineWidth * w;
+  drawLine(
+    data.x0 * w,
+    data.y0 * h,
+    data.x1 * w,
+    data.y1 * h,
+    data.color,
+    false,
+    realLineWidth
+  );
 });
 
 socket.on("text", function(data) {

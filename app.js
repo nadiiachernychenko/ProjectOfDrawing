@@ -3,23 +3,21 @@ const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public")); // Папка с index.html, script.js и стилями
 
-// Массив для хранения всех событий рисования и текста
+// История для новых пользователей
 let history = [];
 
 io.on("connection", (socket) => {
   console.log("Пользователь подключился");
 
-  // При подключении отправляем всю историю
+  // Отправляем историю рисований и текста новому клиенту
   history.forEach(event => {
     socket.emit(event.type, event.data);
   });
 
   socket.on("drawing", (data) => {
-    // Сохраняем событие в истории
     history.push({ type: "drawing", data });
-    // Рассылаем другим
     socket.broadcast.emit("drawing", data);
   });
 
@@ -29,7 +27,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("clear", () => {
-    // Очищаем историю, т.к. доска очищена
     history = [];
     socket.broadcast.emit("clear");
   });
