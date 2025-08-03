@@ -8,9 +8,8 @@ app.use(express.static(__dirname + "/public"));
 let history = [];
 
 io.on("connection", (socket) => {
-  console.log("Підключився користувач");
+  console.log("Пользователь подключился");
 
-  // Надсилаємо всю історію новому користувачу
   history.forEach(event => {
     socket.emit(event.type, event.data);
   });
@@ -27,15 +26,15 @@ io.on("connection", (socket) => {
 
   socket.on("clear", () => {
     history = [];
-    io.emit("clear"); // всім, не лише broadcast
+    socket.broadcast.emit("clear");
   });
 
   socket.on("disconnect", () => {
-    console.log("Користувач відключився");
+    console.log("Пользователь отключился");
   });
 });
 
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
-  console.log(`Сервер запущено на порту ${PORT}`);
+  console.log(`Сервер запущен на порту ${PORT}`);
 });

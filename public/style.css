@@ -4,40 +4,42 @@
   box-sizing: border-box;
 }
 
-body, html {
-  height: 100%;
-  overflow: hidden;
+body {
   font-family: sans-serif;
+  background: #ffffff;
 }
 
 #controls {
-  display: flex;
   padding: 10px;
-  background: #f0f0f0;
-  align-items: center;
+  background: #ffffff;
+  display: flex;
   gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
 }
 
-button {
+#controls input[type="color"],
+#controls input[type="range"],
+#controls input[type="text"] {
+  height: 30px;
+}
+
+#controls button {
   padding: 5px 10px;
-  border: none;
-  background: #ddd;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  border: 1px solid #aaa;
+  background-color: #e0e0e0;
+  border-radius: 5px;
 }
 
-button:hover {
-  background: #ccc;
-}
-
-#textInput {
-  display: none;
-  padding: 5px;
-  font-size: 16px;
+#controls button:hover {
+  background-color: #d0d0d0;
 }
 
 .whiteboard {
   display: block;
-  background: white;
+  width: 100%;
+  height: calc(100vh - 60px);
+  cursor: crosshair;
 }
