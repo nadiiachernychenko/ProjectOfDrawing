@@ -3,15 +3,14 @@ const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-app.use(express.static(__dirname + "/public")); // Папка с index.html, script.js и стилями
+app.use(express.static(__dirname + "/public"));
 
-// История для новых пользователей
 let history = [];
 
 io.on("connection", (socket) => {
-  console.log("Пользователь подключился");
+  console.log("Підключився користувач");
 
-  // Отправляем историю рисований и текста новому клиенту
+  // Надсилаємо всю історію новому користувачу
   history.forEach(event => {
     socket.emit(event.type, event.data);
   });
@@ -28,15 +27,15 @@ io.on("connection", (socket) => {
 
   socket.on("clear", () => {
     history = [];
-    socket.broadcast.emit("clear");
+    io.emit("clear"); // всім, не лише broadcast
   });
 
   socket.on("disconnect", () => {
-    console.log("Пользователь отключился");
+    console.log("Користувач відключився");
   });
 });
 
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
+  console.log(`Сервер запущено на порту ${PORT}`);
 });

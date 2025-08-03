@@ -1,65 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Express Drawing App</title>
-  <style>
-    body, html {
-      margin: 0; padding: 0; height: 100%; overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
-    #controls {
-      background: #eee;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      user-select: none;
-    }
-    button {
-      padding: 5px 10px;
-      cursor: pointer;
-      border: 1px solid #aaa;
-      border-radius: 4px;
-      background: white;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background: #ddd;
-    }
-    button.active {
-      background: #bbb;
-      font-weight: bold;
-    }
-    input[type="range"] {
-      vertical-align: middle;
-    }
-    #textInput {
-      display: none;
-      padding: 5px;
-      font-size: 14px;
-      width: 150px;
-    }
-    canvas.whiteboard {
-      display: block;
-      background: white;
-      cursor: crosshair;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Спільна дошка</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="controls">
-    <button id="drawBtn" class="active">Карандаш</button>
-    <button id="eraserBtn">Ластик</button>
+    <input type="color" id="colorPicker" value="#000000">
+    <button id="drawBtn">✏️</button>
+    <button id="eraserBtn">🧽</button>
     <button id="textBtn">Текст</button>
-    <button id="clearBtn">Очистить</button>
-    <label>Цвет: <input type="color" id="colorPicker" value="#000000"></label>
-    <label>Толщина кисти: <input type="range" id="brushSize" min="1" max="30" value="2"></label>
-    <label>Толщина ластика: <input type="range" id="eraserSize" min="5" max="50" value="20"></label>
-    <input type="text" id="textInput" placeholder="Введите текст" />
+    <button id="clearBtn">Очистити</button>
+    <input type="text" id="textInput" placeholder="Введіть текст">
   </div>
-
   <canvas class="whiteboard"></canvas>
 
   <script src="/socket.io/socket.io.js"></script>
