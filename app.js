@@ -8,7 +8,7 @@ app.use(express.static(__dirname + "/public"));
 let history = [];
 
 io.on("connection", (socket) => {
-  console.log("Пользователь подключился");
+  console.log("Користувач відключився");
 
   history.forEach(event => {
     socket.emit(event.type, event.data);
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Пользователь отключился");
+    console.log("Користувач віключився");
   });
 });
 
